@@ -5,6 +5,7 @@ from app.database import get_db
 from app.models import Profile, User
 from app.schemas.profile import (
     ProfileCreate,
+    ProfileUpdate,
     ProfileResponse
 )
 from app.dependencies import get_current_user
@@ -59,3 +60,31 @@ def get_profile(
         )
 
     return profile
+
+@router.put("/", response_model=ProfileResponse)
+def update_profile(
+    profile: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    existing_profile = db.query(Profile).filter(
+        Profile.user_id == current_user.id
+    ).first()
+
+    if not existing_profile:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile not found"
+        )
+
+    existing_profile.phone = profile.phone
+    existing_profile.location = profile.location
+    existing_profile.bio = profile.bio
+    existing_profile.linkedin = profile.linkedin
+    existing_profile.github = profile.github
+    existing_profile.portfolio = profile.portfolio
+
+    db.commit()
+    db.refresh(existing_profile)
+
+    return existing_profile
