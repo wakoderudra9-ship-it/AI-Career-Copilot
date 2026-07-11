@@ -1,3 +1,5 @@
+from app.services.resume_parser import extract_text_from_pdf
+from app.services.ai_resume_analyzer import analyze_resume
 import os
 import shutil
 
@@ -6,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Resume, User
-from app.schemas.resume import ResumeResponse
+from app.schemas.resume import ResumeAnalysisResponse
 from app.dependencies import get_current_user
 
 router = APIRouter(
@@ -15,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=ResumeResponse)
+@router.post("/", response_model=ResumeAnalysisResponse)
 def upload_resume(
     resume: UploadFile = File(...),
     db: Session = Depends(get_db),
@@ -45,4 +47,15 @@ def upload_resume(
     db.commit()
     db.refresh(new_resume)
 
-    return new_resume
+    # Extract text from the PDF
+    text = extract_text_from_pdf(file_path)
+
+    # Analyze the extracted text
+    analysis = analyze_resume(text)
+
+    # Return everything
+    return {
+        "resume": new_resume,
+        "extracted_text": text,
+        "analysis": analysis
+    }

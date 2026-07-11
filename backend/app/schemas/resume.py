@@ -9,3 +9,9 @@ class ResumeResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ResumeAnalysisResponse(BaseModel):
+    resume: ResumeResponse
+    extracted_text: str
+    analysis: dict
