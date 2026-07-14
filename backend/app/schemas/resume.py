@@ -15,6 +15,9 @@ class ResumeResponse(BaseModel):
 class ResumeAnalysis(BaseModel):
     resume_score: int
     ats_score: int
+    section_scores: dict
+    section_feedback: dict
+    ai_rewrite: dict
 
     skills: List[str]
     education: List[str]
@@ -25,6 +28,10 @@ class ResumeAnalysis(BaseModel):
     phone: Optional[str] = None
 
     suggestions: List[str]
+
+    strengths: List[str]
+    weaknesses: List[str]
+    improvement_suggestions: List[str]
 
 
 class ResumeAnalysisResponse(BaseModel):

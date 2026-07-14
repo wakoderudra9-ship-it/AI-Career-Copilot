@@ -1,8 +1,14 @@
 import re
-
+from app.services.resume_suggestions import generate_resume_suggestions
+from app.services.section_analyzer import analyze_resume_sections
+from app.services.section_feedback import generate_section_feedback
+from app.services.resume_rewriter import rewrite_resume
 
 
 def analyze_resume(text: str):
+    # -------------------------
+    # Skills Database
+    # -------------------------
     skills_database = [
         "Python",
         "Java",
@@ -29,6 +35,9 @@ def analyze_resume(text: str):
         "PyTorch"
     ]
 
+    # -------------------------
+    # Find Skills
+    # -------------------------
     found_skills = []
 
     for skill in skills_database:
@@ -38,7 +47,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Email
     # -------------------------
-
     email = None
 
     email_match = re.search(
@@ -52,7 +60,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Phone
     # -------------------------
-
     phone = None
 
     phone_match = re.search(
@@ -66,7 +73,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Education
     # -------------------------
-
     education_keywords = [
         "B.Tech",
         "M.Tech",
@@ -89,9 +95,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Experience
     # -------------------------
-
-    experience = []
-
     experience_keywords = [
         "Software Engineer",
         "Backend Developer",
@@ -103,6 +106,8 @@ def analyze_resume(text: str):
         "Intern"
     ]
 
+    experience = []
+
     for job in experience_keywords:
         if job.lower() in text.lower():
             experience.append(job)
@@ -110,7 +115,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Resume Score
     # -------------------------
-
     score = 0
 
     score += len(found_skills) * 8
@@ -135,7 +139,6 @@ def analyze_resume(text: str):
     # -------------------------
     # Missing Skills
     # -------------------------
-
     important_skills = [
         "Git",
         "Docker",
@@ -151,9 +154,8 @@ def analyze_resume(text: str):
             missing_skills.append(skill)
 
     # -------------------------
-    # Suggestions
+    # Basic Suggestions
     # -------------------------
-
     suggestions = []
 
     if not email:
@@ -171,14 +173,34 @@ def analyze_resume(text: str):
     if not education:
         suggestions.append("Mention your education.")
 
+    # -------------------------
+    # AI Resume Suggestions
+    # -------------------------
+    resume_feedback = generate_resume_suggestions(text)
+
+    section_scores = analyze_resume_sections(text)
+
+    section_feedback = generate_section_feedback(section_scores)
+
+    ai_rewrite = rewrite_resume(text)
+
+    # -------------------------
+    # Final Response
+    # -------------------------
     return {
         "resume_score": score,
         "ats_score": ats_score,
+        "section_scores": section_scores,
+        "section_feedback": section_feedback,
+        "ai_rewrite": ai_rewrite,
         "skills": found_skills,
         "education": education,
         "experience": experience,
         "missing_skills": missing_skills,
         "email": email,
         "phone": phone,
-        "suggestions": suggestions
+        "suggestions": suggestions,
+        "strengths": resume_feedback["strengths"],
+        "weaknesses": resume_feedback["weaknesses"],
+        "improvement_suggestions": resume_feedback["suggestions"]
     }
