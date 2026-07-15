@@ -1,3 +1,7 @@
+from app.routes.gemini_test import router as gemini_router
+from app.routes.mock_interview import router as mock_interview_router
+from app.routes.interview import router as interview_router
+from app.routes.cover_letter import router as cover_letter_router
 from app.routes.job import router as job_router
 from app.routes.resume import router as resume_router
 from fastapi import FastAPI
@@ -17,6 +21,10 @@ app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(resume_router)
 app.include_router(job_router)
+app.include_router(cover_letter_router)
+app.include_router(interview_router)
+app.include_router(mock_interview_router)
+app.include_router(gemini_router)
 
 @app.get("/")
 def root():
