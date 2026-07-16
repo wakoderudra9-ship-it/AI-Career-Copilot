@@ -1,24 +1,29 @@
 import os
+
 from dotenv import load_dotenv
 from google import genai
 
-# Load environment variables
 load_dotenv()
 
-# Create Gemini client
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
-def generate_text(prompt: str) -> str:
+def generate_text(prompt: str, model: str = "models/gemini-2.5-flash"):
     """
-    Generate text using Gemini.
+    Shared Gemini text generation function.
     """
 
     response = client.models.generate_content(
-        model="gemini-flash-latest",
+        model=model,
         contents=prompt
     )
 
     return response.text
+
+
+def list_models():
+    models = client.models.list()
+
+    return [model.name for model in models]

@@ -1,3 +1,4 @@
+from app.routes.career_roadmap import router as career_roadmap_router
 from app.routes.gemini_test import router as gemini_router
 from app.routes.mock_interview import router as mock_interview_router
 from app.routes.interview import router as interview_router
@@ -25,6 +26,7 @@ app.include_router(cover_letter_router)
 app.include_router(interview_router)
 app.include_router(mock_interview_router)
 app.include_router(gemini_router)
+app.include_router(career_roadmap_router)
 
 @app.get("/")
 def root():

@@ -1,36 +1,60 @@
+from app.services.gemini_service import generate_text
+
+
 def rewrite_resume(text: str):
     """
-    Generate AI-style improvements for the resume.
+    Rewrite the resume professionally using Gemini AI.
     """
 
-    improved_summary = (
-        "Backend Developer skilled in Python, FastAPI, SQL, and Docker "
-        "with a strong interest in building scalable backend systems and REST APIs."
-    )
+    prompt = f"""
+You are an expert resume writer.
 
-    improved_skills = [
-        "Python",
-        "FastAPI",
-        "SQL",
-        "Docker",
-        "Git",
-        "AWS",
-        "REST API"
+Rewrite the following resume professionally.
+
+Resume:
+{text}
+
+Respond ONLY in valid JSON.
+
+Format:
+
+{{
+    "summary": "...",
+
+    "skills": [
+        "...",
+        "..."
+    ],
+
+    "projects": [
+        {{
+            "title": "...",
+            "description": "..."
+        }}
     ]
+}}
 
-    improved_projects = [
-        {
-            "title": "AI Career Copilot",
-            "description": (
-                "Built an AI-powered career assistant using FastAPI, "
-                "JWT Authentication, PostgreSQL, Resume Analysis "
-                "and ATS scoring."
-            )
+Do not include markdown.
+Return only JSON.
+"""
+
+    try:
+        import json
+
+        response = generate_text(prompt)
+
+        # Remove markdown if Gemini wraps JSON
+        response = response.replace("```json", "")
+        response = response.replace("```", "")
+        response = response.strip()
+
+        return json.loads(response)
+
+    except Exception as e:
+        print("Gemini Error:", e)
+
+        return {
+            "summary": "AI resume rewriting is temporarily unavailable.",
+            "skills": [],
+            "projects": []
         }
-    ]
-
-    return {
-        "summary": improved_summary,
-        "skills": improved_skills,
-        "projects": improved_projects
-    }

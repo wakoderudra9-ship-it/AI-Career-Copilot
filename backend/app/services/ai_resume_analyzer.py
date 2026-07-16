@@ -3,6 +3,7 @@ from app.services.resume_suggestions import generate_resume_suggestions
 from app.services.section_analyzer import analyze_resume_sections
 from app.services.section_feedback import generate_section_feedback
 from app.services.resume_rewriter import rewrite_resume
+from app.services.ai_resume_feedback import generate_ai_resume_feedback
 
 
 def analyze_resume(text: str):
@@ -184,6 +185,8 @@ def analyze_resume(text: str):
 
     ai_rewrite = rewrite_resume(text)
 
+    ai_feedback = generate_ai_resume_feedback(text)
+
     # -------------------------
     # Final Response
     # -------------------------
@@ -202,5 +205,6 @@ def analyze_resume(text: str):
         "suggestions": suggestions,
         "strengths": resume_feedback["strengths"],
         "weaknesses": resume_feedback["weaknesses"],
-        "improvement_suggestions": resume_feedback["suggestions"]
+        "improvement_suggestions": resume_feedback["suggestions"],
+        "ai_feedback": ai_feedback
     }
