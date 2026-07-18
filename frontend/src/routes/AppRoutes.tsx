@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -8,6 +10,14 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

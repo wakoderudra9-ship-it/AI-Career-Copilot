@@ -1,12 +1,12 @@
 import api from "../api/axios";
 
-export interface RegisterData {
+interface RegisterData {
   full_name: string;
   email: string;
   password: string;
 }
 
-export interface LoginData {
+interface LoginData {
   email: string;
   password: string;
 }
@@ -17,11 +17,27 @@ export const registerUser = async (data: RegisterData) => {
 };
 
 export const loginUser = async (data: LoginData) => {
-  const response = await api.post("/auth/login", data);
+  const formData = new URLSearchParams();
+
+  formData.append("username", data.email);
+  formData.append("password", data.password);
+
+  const response = await api.post(
+    "/auth/login",
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
   return response.data;
 };
+ 
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem("token");
 
-export const getProfile = async (token: string) => {
   const response = await api.get("/auth/me", {
     headers: {
       Authorization: `Bearer ${token}`,
