@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import FeatureCard from "./FeatureCard";
 
 import {
@@ -12,12 +13,15 @@ import {
 } from "react-icons/fa";
 
 function DashboardGrid() {
+  const navigate = useNavigate();
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <FeatureCard
         title="Resume Analyzer"
         description="Analyze your resume with AI."
         icon={<FaFileAlt />}
+        onClick={() => navigate("/resume")}
       />
 
       <FeatureCard
