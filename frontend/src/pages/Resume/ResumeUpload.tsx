@@ -1,11 +1,22 @@
+import AnalysisGrid from "../../components/Resume/AnalysisGrid";
+import LoadingSpinner from "../../components/Resume/LoadingSpinner";
+import StrengthsCard from "../../components/Resume/StrengthsCard";
+import WeaknessesCard from "../../components/Resume/WeaknessesCard";
+import SuggestionsCard from "../../components/Resume/SuggestionsCard";
+import SectionScores from "../../components/Resume/SectionScores";
+import ResumeScoreCard from "../../components/Resume/ResumeScoreCard";
 import { useState } from "react";
 import UploadBox from "../../components/Resume/UploadBox";
 import { uploadResume } from "../../services/resumeService";
+import type { ResumeAnalysisResponse } from "../../types/resume";
+import ATSScoreCard from "../../components/Resume/ATSScoreCard";
 
 function ResumeUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<Record<string, unknown> | null>(null);
+
+  const [analysisResult, setAnalysisResult] =
+    useState<ResumeAnalysisResponse | null>(null);
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -32,7 +43,6 @@ function ResumeUpload() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-10 w-full max-w-3xl">
-
         <h1 className="text-4xl font-bold text-cyan-400">
           Resume Analyzer
         </h1>
@@ -63,18 +73,43 @@ function ResumeUpload() {
           </div>
         )}
 
-        {analysisResult && (
-          <div className="mt-8 bg-slate-800 rounded-xl p-6">
-            <h2 className="text-2xl font-bold text-cyan-400 mb-4">
-              AI Analysis
-            </h2>
+        {loading && <LoadingSpinner />}
 
-            <pre className="text-slate-300 whitespace-pre-wrap">
-              {JSON.stringify(analysisResult, null, 2)}
-            </pre>
-          </div>
-        )}
+{analysisResult && (
+  <AnalysisGrid>
+    {/* Score Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <ATSScoreCard
+        score={analysisResult.analysis.ats_score}
+      />
 
+      <ResumeScoreCard
+        score={analysisResult.analysis.resume_score}
+      />
+    </div>
+
+    {/* Section Scores */}
+    <SectionScores
+      scores={analysisResult.analysis.section_scores}
+    />
+
+    {/* Strengths & Weaknesses */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <StrengthsCard
+        strengths={analysisResult.analysis.strengths}
+      />
+
+      <WeaknessesCard
+        weaknesses={analysisResult.analysis.weaknesses}
+      />
+    </div>
+
+    {/* AI Suggestions */}
+    <SuggestionsCard
+      suggestions={analysisResult.analysis.improvement_suggestions}
+    />
+  </AnalysisGrid>
+)}
       </div>
     </div>
   );
