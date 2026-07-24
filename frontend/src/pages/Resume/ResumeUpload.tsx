@@ -1,3 +1,4 @@
+import { generateResumePDF } from "../../services/pdfService";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import UploadBox from "../../components/Resume/UploadBox";
@@ -135,6 +136,14 @@ function ResumeUpload() {
                 analysisResult.analysis.improvement_suggestions
               }
             />
+            <div className="mt-8 flex justify-center">
+  <button
+    onClick={() => generateResumePDF(analysisResult)}
+    className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition"
+  >
+    📄 Download PDF Report
+  </button>
+</div>
           </AnalysisGrid>
         )}
       </div>
