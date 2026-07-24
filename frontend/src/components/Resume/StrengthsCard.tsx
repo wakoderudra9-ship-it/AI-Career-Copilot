@@ -1,26 +1,28 @@
+import { FaCheckCircle } from "react-icons/fa";
+import Card from "../Common/Card";
+import SectionTitle from "../Common/SectionTitle";
+
 interface StrengthsCardProps {
   strengths: string[];
 }
 
 function StrengthsCard({ strengths }: StrengthsCardProps) {
   return (
-    <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-      <h2 className="text-2xl font-bold text-green-400 mb-6">
-        💪 Strengths
-      </h2>
+    <Card>
+      <SectionTitle title="💪 Strengths" />
 
-      <ul className="space-y-3">
+      <ul className="space-y-4">
         {strengths.map((strength, index) => (
           <li
             key={index}
-            className="text-slate-300 flex items-center gap-3"
+            className="flex items-start gap-3 text-slate-300"
           >
-            <span className="text-green-400 text-lg">✔</span>
-            {strength}
+            <FaCheckCircle className="text-green-400 mt-1 flex-shrink-0" />
+            <span>{strength}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }
 

@@ -1,26 +1,28 @@
+import { FaExclamationCircle } from "react-icons/fa";
+import Card from "../Common/Card";
+import SectionTitle from "../Common/SectionTitle";
+
 interface WeaknessesCardProps {
   weaknesses: string[];
 }
 
 function WeaknessesCard({ weaknesses }: WeaknessesCardProps) {
   return (
-    <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-      <h2 className="text-2xl font-bold text-red-400 mb-6">
-        ⚠ Weaknesses
-      </h2>
+    <Card>
+      <SectionTitle title="⚠️ Weaknesses" />
 
-      <ul className="space-y-3">
+      <ul className="space-y-4">
         {weaknesses.map((weakness, index) => (
           <li
             key={index}
-            className="text-slate-300 flex items-center gap-3"
+            className="flex items-start gap-3 text-slate-300"
           >
-            <span className="text-red-400 text-lg">✖</span>
-            {weakness}
+            <FaExclamationCircle className="text-red-400 mt-1 flex-shrink-0" />
+            <span>{weakness}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }
 

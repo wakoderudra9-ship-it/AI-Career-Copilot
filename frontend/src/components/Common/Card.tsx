@@ -1,14 +1,17 @@
 import type { ReactNode } from "react";
+
 interface CardProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
+  delay?: number;
 }
 
 function Card({
   children,
   className = "",
   hover = true,
+  delay = 0,
 }: CardProps) {
   return (
     <div
@@ -20,7 +23,9 @@ function Card({
         p-8
         shadow-lg
         transition-all
-        duration-300
+        duration-500
+        opacity-0
+        animate-fadeIn
         ${
           hover
             ? "hover:-translate-y-1 hover:shadow-cyan-500/20"
@@ -28,6 +33,10 @@ function Card({
         }
         ${className}
       `}
+      style={{
+        animationDelay: `${delay}ms`,
+        animationFillMode: "forwards",
+      }}
     >
       {children}
     </div>

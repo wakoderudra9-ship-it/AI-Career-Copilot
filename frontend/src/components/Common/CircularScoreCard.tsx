@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
-
 interface CircularScoreCardProps {
   title: string;
   score: number;
@@ -11,6 +11,24 @@ function CircularScoreCard({
   score,
   description,
 }: CircularScoreCardProps) {
+    const [animatedScore, setAnimatedScore] = useState(0);
+
+useEffect(() => {
+  let current = 0;
+
+  const interval = setInterval(() => {
+    current += 1;
+
+    if (current >= score) {
+      current = score;
+      clearInterval(interval);
+    }
+
+    setAnimatedScore(current);
+  }, 15);
+
+  return () => clearInterval(interval);
+}, [score]);
   const radius = 58;
   const stroke = 10;
   const normalizedRadius = radius - stroke / 2;
@@ -18,10 +36,11 @@ function CircularScoreCard({
   const circumference = 2 * Math.PI * normalizedRadius;
 
   const strokeDashoffset =
-    circumference - (score / 100) * circumference;
+  circumference -
+  (animatedScore / 100) * circumference;
 
   const color =
-    score >= 80
+  animatedScore >= 80
       ? "#22c55e"
       : score >= 50
       ? "#eab308"
@@ -71,7 +90,7 @@ function CircularScoreCard({
               className="text-4xl font-bold"
               style={{ color }}
             >
-              {score}
+              {animatedScore}
             </span>
           </div>
         </div>

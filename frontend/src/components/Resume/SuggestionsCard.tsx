@@ -1,26 +1,28 @@
+import { FaLightbulb } from "react-icons/fa";
+import Card from "../Common/Card";
+import SectionTitle from "../Common/SectionTitle";
+
 interface SuggestionsCardProps {
   suggestions: string[];
 }
 
 function SuggestionsCard({ suggestions }: SuggestionsCardProps) {
   return (
-    <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-      <h2 className="text-2xl font-bold text-yellow-400 mb-6">
-        💡 AI Suggestions
-      </h2>
+    <Card>
+      <SectionTitle title="💡 AI Suggestions" />
 
-      <ul className="space-y-3">
+      <ul className="space-y-4">
         {suggestions.map((suggestion, index) => (
           <li
             key={index}
-            className="text-slate-300 flex items-center gap-3"
+            className="flex items-start gap-3 text-slate-300"
           >
-            <span className="text-yellow-400 text-lg">➜</span>
-            {suggestion}
+            <FaLightbulb className="text-yellow-400 mt-1 flex-shrink-0" />
+            <span>{suggestion}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }
 
