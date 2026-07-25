@@ -1,12 +1,10 @@
+import { PDFLayout } from "../pdf/layout";
 import jsPDF from "jspdf";
-
 import type { ResumeAnalysisResponse } from "../types/resume";
-
 import { addHeader } from "../pdf/header";
 import { addFooter } from "../pdf/footer";
 import { addReportInfo } from "../pdf/helpers";
 import { addScoreCard } from "../pdf/scoreCards";
-
 import { addSectionScores } from "../pdf/sections";
 
 import {
@@ -44,38 +42,44 @@ export const generateResumePDF = (
     112
   );
 
-  // Section Scores
-  addSectionScores(doc, analysis);
+ // Dynamic Layout Engine
+const layout = new PDFLayout(160);
 
-  // Skills
-  addSkills(
-    doc,
-    analysis.analysis.skills
-  );
+addSectionScores(
+  doc,
+  analysis,
+  layout
+);
 
-  // Missing Skills
-  addMissingSkills(
-    doc,
-    analysis.analysis.missing_skills
-  );
+addSkills(
+  doc,
+  analysis.analysis.skills,
+  layout
+);
 
-  // Strengths
-  addStrengths(
-    doc,
-    analysis.analysis.strengths
-  );
+addMissingSkills(
+  doc,
+  analysis.analysis.missing_skills,
+  layout
+);
 
-  // Weaknesses
-  addWeaknesses(
-    doc,
-    analysis.analysis.weaknesses
-  );
+addStrengths(
+  doc,
+  analysis.analysis.strengths,
+  layout
+);
 
-  // AI Suggestions
-  addSuggestions(
-    doc,
-    analysis.analysis.improvement_suggestions
-  );
+addWeaknesses(
+  doc,
+  analysis.analysis.weaknesses,
+  layout
+);
+
+addSuggestions(
+  doc,
+  analysis.analysis.improvement_suggestions,
+  layout
+);
 
   // Footer
   addFooter(doc);
