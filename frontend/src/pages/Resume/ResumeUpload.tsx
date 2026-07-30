@@ -1,6 +1,9 @@
-import { generateResumePDF } from "../../services/pdfService";
-import toast from "react-hot-toast";
 import { useState } from "react";
+import toast from "react-hot-toast";
+
+import { generateResumePDF } from "../../services/pdfService";
+import { uploadResume } from "../../services/resumeService";
+
 import UploadBox from "../../components/Resume/UploadBox";
 import LoadingSpinner from "../../components/Resume/LoadingSpinner";
 import AnalysisGrid from "../../components/Resume/AnalysisGrid";
@@ -13,7 +16,6 @@ import StrengthsCard from "../../components/Resume/StrengthsCard";
 import WeaknessesCard from "../../components/Resume/WeaknessesCard";
 import SuggestionsCard from "../../components/Resume/SuggestionsCard";
 
-import { uploadResume } from "../../services/resumeService";
 import type { ResumeAnalysisResponse } from "../../types/resume";
 
 function ResumeUpload() {
@@ -33,8 +35,6 @@ function ResumeUpload() {
 
       const result = await uploadResume(selectedFile);
 
-      console.log(result);
-
       setAnalysisResult(result);
 
       toast.success("Resume analyzed successfully!");
@@ -47,106 +47,145 @@ function ResumeUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-10 w-full max-w-3xl">
-        <h1 className="text-4xl font-bold text-cyan-400">
-          Resume Analyzer
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-6 py-12">
 
-        <p className="text-slate-400 mt-4">
-          Upload your resume and let AI analyze it.
-        </p>
+      <div className="mx-auto max-w-7xl">
 
-        <UploadBox onFileChange={setSelectedFile} />
+        {/* Hero */}
 
-        {/* Selected File */}
-        <div className="mt-6 rounded-lg bg-slate-800 p-4">
-          <h3 className="text-white font-semibold">
-            Selected File
-          </h3>
+        <div className="mb-10 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-600 p-10 shadow-2xl">
 
-          <p className="text-cyan-400 mt-2">
-            {selectedFile ? selectedFile.name : "No file selected"}
+          <h1 className="text-5xl font-extrabold text-white">
+            Resume Analyzer
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-lg text-white/90">
+            Upload your resume and receive a complete AI-powered report,
+            ATS compatibility score, strengths, weaknesses, missing skills,
+            and personalized improvement suggestions.
           </p>
 
-          <button
-            onClick={handleUpload}
-            disabled={loading}
-            className="mt-6 bg-cyan-500 hover:bg-cyan-600 disabled:bg-cyan-800 px-6 py-3 rounded-xl font-semibold text-white"
-          >
-            {loading ? "Analyzing..." : "Analyze Resume"}
-          </button>
         </div>
 
-        {loading && <LoadingSpinner />}
+        {/* Upload Card */}
+
+        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
+
+          <UploadBox onFileChange={setSelectedFile} />
+
+          <div className="mt-8 rounded-2xl border border-slate-700 bg-slate-800 p-6">
+
+            <h3 className="text-lg font-semibold text-white">
+              Selected Resume
+            </h3>
+
+            <p className="mt-3 break-all text-cyan-400">
+              {selectedFile
+                ? selectedFile.name
+                : "No file selected"}
+            </p>
+
+            <button
+              onClick={handleUpload}
+              disabled={loading}
+              className="mt-8 rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-white transition-all duration-300 hover:bg-cyan-600 hover:shadow-lg hover:shadow-cyan-500/30 disabled:cursor-not-allowed disabled:bg-slate-700"
+            >
+              {loading
+                ? "Analyzing Resume..."
+                : "Analyze Resume"}
+            </button>
+
+          </div>
+
+          {loading && (
+            <div className="mt-8">
+              <LoadingSpinner />
+            </div>
+          )}
+
+        </div>
+
+        {/* Results */}
 
         {analysisResult && (
-          <AnalysisGrid>
-            {/* Score Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <ATSScoreCard
-                score={analysisResult.analysis.ats_score}
+          <div className="mt-12">
+
+            <AnalysisGrid>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <ATSScoreCard
+                  score={analysisResult.analysis.ats_score}
+                />
+
+                <ResumeScoreCard
+                  score={analysisResult.analysis.resume_score}
+                />
+              </div>
+
+              <ResumeHealthCard
+                resumeScore={analysisResult.analysis.resume_score}
+                atsScore={analysisResult.analysis.ats_score}
+                sectionScores={analysisResult.analysis.section_scores}
               />
 
-              <ResumeScoreCard
-                score={analysisResult.analysis.resume_score}
-              />
-            </div>
-
-            {/* Resume Health */}
-            <ResumeHealthCard
-              resumeScore={analysisResult.analysis.resume_score}
-              atsScore={analysisResult.analysis.ats_score}
-              sectionScores={analysisResult.analysis.section_scores}
-            />
-
-            {/* Section Scores */}
-            <SectionScores
-              scores={analysisResult.analysis.section_scores}
-            />
-
-            {/* Skills */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <SkillsCard
-                title="Skills"
-                skills={analysisResult.analysis.skills}
+              <SectionScores
+                scores={analysisResult.analysis.section_scores}
               />
 
-              <SkillsCard
-                title="Missing Skills"
-                skills={analysisResult.analysis.missing_skills}
-                variant="danger"
-              />
-            </div>
+              <div className="grid gap-6 md:grid-cols-2">
 
-            {/* Strengths & Weaknesses */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <StrengthsCard
-                strengths={analysisResult.analysis.strengths}
+                <SkillsCard
+                  title="Skills"
+                  skills={analysisResult.analysis.skills}
+                />
+
+                <SkillsCard
+                  title="Missing Skills"
+                  skills={analysisResult.analysis.missing_skills}
+                  variant="danger"
+                />
+
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+
+                <StrengthsCard
+                  strengths={analysisResult.analysis.strengths}
+                />
+
+                <WeaknessesCard
+                  weaknesses={analysisResult.analysis.weaknesses}
+                />
+
+              </div>
+
+              <SuggestionsCard
+                suggestions={
+                  analysisResult.analysis
+                    .improvement_suggestions
+                }
               />
 
-              <WeaknessesCard
-                weaknesses={analysisResult.analysis.weaknesses}
-              />
-            </div>
+              <div className="mt-10 flex justify-center">
 
-            {/* AI Suggestions */}
-            <SuggestionsCard
-              suggestions={
-                analysisResult.analysis.improvement_suggestions
-              }
-            />
-            <div className="mt-8 flex justify-center">
-  <button
-    onClick={() => generateResumePDF(analysisResult)}
-    className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition"
-  >
-    📄 Download PDF Report
-  </button>
-</div>
-          </AnalysisGrid>
+                <button
+                  onClick={() =>
+                    generateResumePDF(analysisResult)
+                  }
+                  className="rounded-xl bg-emerald-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-500/30"
+                >
+                  📄 Download Professional PDF Report
+                </button>
+
+              </div>
+
+            </AnalysisGrid>
+
+          </div>
         )}
+
       </div>
+
     </div>
   );
 }

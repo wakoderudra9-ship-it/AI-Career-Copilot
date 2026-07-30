@@ -15,56 +15,80 @@ import {
 function DashboardGrid() {
   const navigate = useNavigate();
 
+  const features = [
+    {
+      title: "Resume Analyzer",
+      description: "Upload your resume and receive AI-powered feedback, ATS score, and improvement suggestions.",
+      icon: <FaFileAlt />,
+      color: "from-cyan-500 to-blue-600",
+      action: () => navigate("/resume"),
+      active: true,
+    },
+    {
+      title: "ATS Score",
+      description: "Measure how recruiter-friendly your resume is.",
+      icon: <FaChartLine />,
+      color: "from-green-500 to-emerald-600",
+      active: false,
+    },
+    {
+      title: "Job Matcher",
+      description: "Find jobs that match your skills and experience.",
+      icon: <FaBriefcase />,
+      color: "from-purple-500 to-indigo-600",
+      active: false,
+    },
+    {
+      title: "Cover Letter",
+      description: "Generate personalized AI cover letters instantly.",
+      icon: <FaPenFancy />,
+      color: "from-orange-500 to-red-500",
+      active: false,
+    },
+    {
+      title: "Mock Interview",
+      description: "Practice interview questions with AI guidance.",
+      icon: <FaMicrophone />,
+      color: "from-pink-500 to-rose-600",
+      active: false,
+    },
+    {
+      title: "Career Roadmap",
+      description: "Plan your learning journey and career growth.",
+      icon: <FaRoad />,
+      color: "from-yellow-500 to-amber-600",
+      active: false,
+    },
+    {
+      title: "Profile",
+      description: "Manage your personal information and preferences.",
+      icon: <FaUser />,
+      color: "from-sky-500 to-cyan-600",
+      active: false,
+    },
+    {
+      title: "Settings",
+      description: "Customize your AI Career Copilot experience.",
+      icon: <FaCog />,
+      color: "from-slate-500 to-slate-700",
+      active: false,
+    },
+  ];
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-      <FeatureCard
-        title="Resume Analyzer"
-        description="Analyze your resume with AI."
-        icon={<FaFileAlt />}
-        onClick={() => navigate("/resume")}
-      />
-
-      <FeatureCard
-        title="ATS Score"
-        description="Check ATS compatibility."
-        icon={<FaChartLine />}
-      />
-
-      <FeatureCard
-        title="Job Matcher"
-        description="Find jobs that fit your profile."
-        icon={<FaBriefcase />}
-      />
-
-      <FeatureCard
-        title="Cover Letter"
-        description="Generate AI cover letters."
-        icon={<FaPenFancy />}
-      />
-
-      <FeatureCard
-        title="Mock Interview"
-        description="Practice interview questions."
-        icon={<FaMicrophone />}
-      />
-
-      <FeatureCard
-        title="Career Roadmap"
-        description="Plan your future career."
-        icon={<FaRoad />}
-      />
-
-      <FeatureCard
-        title="Profile"
-        description="Manage your profile."
-        icon={<FaUser />}
-      />
-
-      <FeatureCard
-        title="Settings"
-        description="Application preferences."
-        icon={<FaCog />}
-      />
+    <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+      {features.map((feature) => (
+        <FeatureCard
+          key={feature.title}
+          title={feature.title}
+          description={feature.description}
+          icon={feature.icon}
+          onClick={feature.active ? feature.action : undefined}
+          badge={feature.active ? "Available" : "Coming Soon"}
+          gradient={feature.color}
+          disabled={!feature.active}
+        />
+      ))}
     </div>
   );
 }

@@ -2,10 +2,39 @@ import jsPDF from "jspdf";
 import type { ResumeAnalysisResponse } from "../types/resume";
 import { COLORS } from "./colors";
 
+const PAGE_HEIGHT = 297;
+const TOP_MARGIN = 20;
+const BOTTOM_MARGIN = 25;
+
 function getBarColor(score: number) {
   if (score >= 8) return COLORS.success;
   if (score >= 6) return COLORS.warning;
   return COLORS.danger;
+}
+
+function ensurePageSpace(
+  doc: jsPDF,
+  currentY: number,
+  requiredHeight: number
+): number {
+  if (currentY + requiredHeight > PAGE_HEIGHT - BOTTOM_MARGIN) {
+    doc.addPage();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+
+    doc.setTextColor(
+      COLORS.dark.r,
+      COLORS.dark.g,
+      COLORS.dark.b
+    );
+
+    doc.text("Section Performance (Continued)", 20, TOP_MARGIN);
+
+    return TOP_MARGIN + 12;
+  }
+
+  return currentY;
 }
 
 export function addSectionScores(
@@ -33,14 +62,21 @@ export function addSectionScores(
     analysis.analysis.section_scores
   ).forEach(([section, score]) => {
 
-    const color = getBarColor(score);
+    y = ensurePageSpace(doc, y, 24);
 
-    // Section Name
-    doc.setFontSize(12);
+    const color = getBarColor(Number(score));
+
     doc.setFont("helvetica", "bold");
-    doc.text(section, 20, y);
+    doc.setFontSize(12);
 
-    // Background Bar
+    doc.setTextColor(
+      COLORS.dark.r,
+      COLORS.dark.g,
+      COLORS.dark.b
+    );
+
+    doc.text(String(section), 20, y);
+
     doc.setFillColor(
       COLORS.lightGray.r,
       COLORS.lightGray.g,
@@ -57,7 +93,6 @@ export function addSectionScores(
       "F"
     );
 
-    // Filled Bar
     doc.setFillColor(
       color.r,
       color.g,
@@ -67,18 +102,17 @@ export function addSectionScores(
     doc.roundedRect(
       20,
       y + 3,
-      score * 12,
+      Number(score) * 12,
       6,
       2,
       2,
       "F"
     );
 
-    // Score
     doc.setFont("helvetica", "bold");
 
     doc.text(
-      `${score}/10`,
+      `${Number(score)}/10`,
       150,
       y + 8
     );
