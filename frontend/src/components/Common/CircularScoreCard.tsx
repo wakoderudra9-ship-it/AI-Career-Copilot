@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
+
 interface CircularScoreCardProps {
   title: string;
   score: number;
@@ -11,64 +12,102 @@ function CircularScoreCard({
   score,
   description,
 }: CircularScoreCardProps) {
-    const [animatedScore, setAnimatedScore] = useState(0);
 
-useEffect(() => {
-  let current = 0;
+  const [animatedScore, setAnimatedScore] = useState(0);
 
-  const interval = setInterval(() => {
-    current += 1;
+  useEffect(() => {
 
-    if (current >= score) {
-      current = score;
-      clearInterval(interval);
-    }
+    let current = 0;
 
-    setAnimatedScore(current);
-  }, 15);
+    const interval = setInterval(() => {
 
-  return () => clearInterval(interval);
-}, [score]);
+      current++;
+
+      if (current >= score) {
+        current = score;
+        clearInterval(interval);
+      }
+
+      setAnimatedScore(current);
+
+    }, 15);
+
+    return () => clearInterval(interval);
+
+  }, [score]);
+
   const radius = 58;
   const stroke = 10;
   const normalizedRadius = radius - stroke / 2;
 
-  const circumference = 2 * Math.PI * normalizedRadius;
+  const circumference =
+    2 * Math.PI * normalizedRadius;
 
   const strokeDashoffset =
-  circumference -
-  (animatedScore / 100) * circumference;
+    circumference -
+    (animatedScore / 100) * circumference;
 
   const color =
-  animatedScore >= 80
+    animatedScore >= 85
       ? "#22c55e"
-      : score >= 50
+      : animatedScore >= 70
+      ? "#06b6d4"
+      : animatedScore >= 50
       ? "#eab308"
       : "#ef4444";
 
+  const status =
+    animatedScore >= 85
+      ? "Excellent"
+      : animatedScore >= 70
+      ? "Good"
+      : animatedScore >= 50
+      ? "Average"
+      : "Needs Improvement";
+
   return (
     <Card>
-      <h2 className="text-xl font-semibold text-slate-300">
-        {title}
-      </h2>
+
+      <div className="flex items-center justify-between">
+
+        <h2 className="text-2xl font-bold text-white">
+          {title}
+        </h2>
+
+        <span
+          className="rounded-full px-4 py-1 text-sm font-semibold"
+          style={{
+            backgroundColor: `${color}22`,
+            color,
+          }}
+        >
+          {status}
+        </span>
+
+      </div>
 
       <div className="mt-8 flex justify-center">
-        <div className="relative w-36 h-36">
+
+        <div className="relative h-40 w-40">
+
           <svg
-            className="w-36 h-36 -rotate-90"
+            className="h-40 w-40 -rotate-90"
             viewBox="0 0 120 120"
           >
-            {/* Background Circle */}
+
+            {/* Background */}
+
             <circle
               cx="60"
               cy="60"
               r={normalizedRadius}
-              stroke="#334155"
+              stroke="#1e293b"
               strokeWidth={stroke}
               fill="transparent"
             />
 
-            {/* Progress Circle */}
+            {/* Progress */}
+
             <circle
               cx="60"
               cy="60"
@@ -80,25 +119,40 @@ useEffect(() => {
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               style={{
-                transition: "stroke-dashoffset 1s ease-in-out",
+                transition:
+                  "stroke-dashoffset 1s ease-in-out",
               }}
             />
+
           </svg>
 
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+
             <span
-              className="text-4xl font-bold"
+              className="text-5xl font-extrabold"
               style={{ color }}
             >
               {animatedScore}
             </span>
+
+            <span className="text-slate-400 text-sm">
+              /100
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
-      <p className="mt-6 text-slate-400">
-        {description}
-      </p>
+      <div className="mt-8 rounded-2xl bg-slate-800/60 p-4">
+
+        <p className="text-center leading-7 text-slate-300">
+          {description}
+        </p>
+
+      </div>
+
     </Card>
   );
 }

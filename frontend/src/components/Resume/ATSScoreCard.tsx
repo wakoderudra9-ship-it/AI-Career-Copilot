@@ -4,12 +4,14 @@ interface ATSScoreCardProps {
   score: number;
 }
 
-function ATSScoreCard({ score }: ATSScoreCardProps) {
+function ATSScoreCard({
+  score,
+}: ATSScoreCardProps) {
   return (
     <CircularScoreCard
-      title="ATS Score"
+      title="ATS Compatibility"
       score={score}
-      description="Compatibility with Applicant Tracking Systems."
+      description="Measures how well your resume can be parsed by Applicant Tracking Systems used by recruiters."
     />
   );
 }
