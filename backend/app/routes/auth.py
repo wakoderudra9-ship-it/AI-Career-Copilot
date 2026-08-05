@@ -41,17 +41,33 @@ def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+    print("========== LOGIN ==========")
+    print("Username:", form_data.username)
+    print("Password:", form_data.password)
+
     db_user = db.query(User).filter(
         User.email == form_data.username
     ).first()
 
+    print("DB User:", db_user)
+
     if not db_user:
+        print("User not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
 
-    if not verify_password(form_data.password, db_user.password):
+    print("Stored hash:", db_user.password)
+
+    result = verify_password(
+        form_data.password,
+        db_user.password
+    )
+
+    print("Verify result:", result)
+
+    if not result:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -65,10 +81,3 @@ def login_user(
         "access_token": access_token,
         "token_type": "bearer"
     }
-
-
-@router.get("/me", response_model=UserResponse)
-def get_my_profile(
-    current_user: User = Depends(get_current_user)
-):
-    return current_user
