@@ -4,7 +4,12 @@ import { AxiosError } from "axios";
 
 import { getCurrentUser } from "../../services/authService";
 
+import DashboardSidebar from "../../components/Dashboard/DashboardSidebar";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
+import DashboardStats from "../../components/Dashboard/DashboardStats";
+import CareerReadinessCard from "../../components/Dashboard/CareerReadinessCard";
+import QuickActions from "../../components/Dashboard/QuickActions";
+import AICareerInsight from "../../components/Dashboard/AICareerInsight";
 import DashboardGrid from "../../components/Dashboard/DashboardGrid";
 
 interface User {
@@ -40,54 +45,43 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950 text-white">
 
-      <div className="max-w-7xl mx-auto px-8 py-10">
+      {/* Sidebar */}
 
-        {/* Header */}
+      <DashboardSidebar onLogout={logout} />
 
-        <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-6 mb-10">
+      {/* Main Content */}
 
-          <div>
+      <main className="min-h-screen pl-72">
+
+        <div className="mx-auto max-w-7xl px-8 py-10">
+
+          {/* Header */}
+
+          <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+
             <DashboardHeader
               name={user?.full_name ?? ""}
             />
 
-            <p className="text-slate-400 mt-3 text-lg">
-              Analyze resumes, improve ATS scores and build a stronger career profile with AI.
-            </p>
           </div>
 
-          <button
-            onClick={logout}
-            className="bg-red-500 hover:bg-red-600 transition-all duration-300 px-6 py-3 rounded-xl font-semibold shadow-lg"
-          >
-            Logout
-          </button>
+          {/* Dashboard Content */}
+
+          <DashboardStats />
+
+<CareerReadinessCard />
+
+<QuickActions />
+
+<AICareerInsight />
+
+<DashboardGrid />
 
         </div>
 
-        {/* Welcome Banner */}
-
-        <div className="mb-10 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-600 p-8 shadow-2xl">
-
-          <h2 className="text-3xl font-bold mb-3">
-            🚀 AI Career Copilot
-          </h2>
-
-          <p className="text-lg text-white/90 max-w-3xl">
-            Upload your resume, receive AI-powered feedback,
-            improve ATS compatibility, discover missing skills,
-            and download a professional multi-page analysis report.
-          </p>
-
-        </div>
-
-        {/* Main Dashboard */}
-
-        <DashboardGrid />
-
-      </div>
+      </main>
 
     </div>
   );

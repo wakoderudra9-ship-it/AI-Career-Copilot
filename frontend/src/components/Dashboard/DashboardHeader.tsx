@@ -5,30 +5,44 @@ interface Props {
 function DashboardHeader({ name }: Props) {
   const greetingName = name.trim() || "Developer";
 
-  return (
-    <div className="space-y-4">
+  const hour = new Date().getHours();
 
-      <div className="inline-flex items-center rounded-full bg-cyan-500/10 border border-cyan-400/30 px-4 py-2">
-        <span className="text-cyan-300 text-sm font-semibold tracking-wide uppercase">
-          AI Powered Career Assistant
-        </span>
+  let greeting = "Good evening";
+
+  if (hour < 12) {
+    greeting = "Good morning";
+  } else if (hour < 18) {
+    greeting = "Good afternoon";
+  }
+
+  return (
+    <div className="flex w-full items-center justify-between gap-6">
+
+      {/* Greeting */}
+
+      <div>
+        <p className="mb-2 text-sm font-medium uppercase tracking-[0.18em] text-cyan-400">
+          Career Dashboard
+        </p>
+
+        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+          {greeting}, {greetingName} 👋
+        </h1>
+
+        <p className="mt-2 text-base text-slate-400">
+          Here's an overview of your career progress.
+        </p>
       </div>
 
-      <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-        <span className="text-white">AI Career </span>
-        <span className="text-cyan-400">Copilot</span>
-      </h1>
+      {/* Notification */}
 
-      <h2 className="text-2xl md:text-3xl font-semibold text-white">
-        Welcome back,
-        <span className="text-cyan-400"> {greetingName}</span> 👋
-      </h2>
-
-      <p className="max-w-2xl text-slate-400 text-lg leading-8">
-        Upload your resume, receive detailed AI insights, improve your ATS
-        score, identify missing skills, and generate a professional resume
-        analysis report in just a few seconds.
-      </p>
+      <button
+        type="button"
+        aria-label="Notifications"
+        className="hidden h-11 w-11 items-center justify-center rounded-xl border border-slate-800 bg-slate-900 text-slate-400 transition-all duration-200 hover:border-cyan-500/40 hover:bg-slate-800 hover:text-cyan-400 sm:flex"
+      >
+        <span className="text-lg">🔔</span>
+      </button>
 
     </div>
   );

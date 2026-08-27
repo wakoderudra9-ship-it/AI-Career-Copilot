@@ -16,3 +16,16 @@ export const uploadResume = async (file: File) => {
 
   return response.data;
 };
+
+
+export const getLatestResumeAnalysis = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await api.get("/resume/latest", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
