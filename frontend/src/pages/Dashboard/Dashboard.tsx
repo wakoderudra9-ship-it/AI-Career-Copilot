@@ -10,6 +10,8 @@ import DashboardStats from "../../components/Dashboard/DashboardStats";
 import CareerReadinessCard from "../../components/Dashboard/CareerReadinessCard";
 import QuickActions from "../../components/Dashboard/QuickActions";
 import AICareerInsight from "../../components/Dashboard/AICareerInsight";
+import SkillGapOverview from "../../components/Dashboard/SkillGapOverview";
+import CareerRoadmap from "../../components/Dashboard/CareerRoadmap";
 import DashboardGrid from "../../components/Dashboard/DashboardGrid";
 
 interface User {
@@ -71,13 +73,17 @@ function Dashboard() {
 
           <DashboardStats />
 
-<CareerReadinessCard />
+          <CareerReadinessCard />
 
-<QuickActions />
+          <QuickActions />
 
-<AICareerInsight />
+          <AICareerInsight />
 
-<DashboardGrid />
+          <SkillGapOverview />
+
+          <CareerRoadmap />
+
+          <DashboardGrid />
 
         </div>
 
