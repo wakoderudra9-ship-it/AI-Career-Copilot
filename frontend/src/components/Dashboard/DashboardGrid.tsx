@@ -16,6 +16,17 @@ import {
 function DashboardGrid() {
   const navigate = useNavigate();
 
+  const scrollToCareerRoadmap = () => {
+    const roadmapSection = document.getElementById("career-roadmap");
+
+    if (roadmapSection) {
+      roadmapSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   const features = [
     {
       title: "Resume Analyzer",
@@ -32,7 +43,8 @@ function DashboardGrid() {
         "Measure how recruiter-friendly your resume is.",
       icon: <FaChartLine />,
       color: "from-green-500 to-emerald-600",
-      active: false,
+      action: () => navigate("/resume"),
+      active: true,
     },
     {
       title: "Job Matcher",
@@ -40,7 +52,8 @@ function DashboardGrid() {
         "Find jobs that match your skills and experience.",
       icon: <FaBriefcase />,
       color: "from-purple-500 to-indigo-600",
-      active: false,
+      action: () => navigate("/job-matcher"),
+      active: true,
     },
     {
       title: "Cover Letter",
@@ -64,7 +77,8 @@ function DashboardGrid() {
         "Plan your learning journey and career growth.",
       icon: <FaRoad />,
       color: "from-yellow-500 to-amber-600",
-      active: false,
+      action: scrollToCareerRoadmap,
+      active: true,
     },
     {
       title: "Profile",

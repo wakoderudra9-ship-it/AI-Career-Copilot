@@ -47,29 +47,40 @@ function CareerRoadmap() {
     priority: RoadmapStep["priority"]
   ) => {
     if (priority === "High") {
-      return "bg-cyan-500/10 text-cyan-400 border-cyan-400/20";
+      return "border-cyan-400/20 bg-cyan-500/10 text-cyan-400";
     }
 
     if (priority === "Medium") {
-      return "bg-yellow-500/10 text-yellow-400 border-yellow-400/20";
+      return "border-yellow-400/20 bg-yellow-500/10 text-yellow-400";
     }
 
-    return "bg-slate-800 text-slate-400 border-slate-700";
+    return "border-slate-700 bg-slate-800 text-slate-400";
   };
 
   return (
-    <section className="mb-10">
-
+    <section
+      id="career-roadmap"
+      className="mb-10 scroll-mt-8"
+    >
       {/* Section Header */}
 
       <div className="mb-5">
-        <h2 className="text-xl font-bold text-white">
-          Career Roadmap
-        </h2>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-500/10 text-yellow-400">
+            <FaRoad />
+          </div>
 
-        <p className="mt-1 text-sm text-slate-500">
-          An AI-generated career path based on your resume and skill gaps.
-        </p>
+          <div>
+            <h2 className="text-xl font-bold text-white">
+              Career Roadmap
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Your personalized AI career path based on your resume, skills,
+              and career goals.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Main Card */}
@@ -81,7 +92,6 @@ function CareerRoadmap() {
           /* Loading State */
 
           <div className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-950/40 p-6">
-
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
               <FaRoad />
             </div>
@@ -92,10 +102,10 @@ function CareerRoadmap() {
               </h3>
 
               <p className="mt-1 text-sm text-slate-500">
-                Loading your personalized AI recommendations...
+                Analyzing your resume and generating personalized career
+                recommendations...
               </p>
             </div>
-
           </div>
 
         ) : roadmap ? (
@@ -114,9 +124,15 @@ function CareerRoadmap() {
 
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 
-                  <h3 className="font-semibold text-white">
-                    {roadmap.career_goal}
-                  </h3>
+                  <div>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-cyan-400">
+                      Career Goal
+                    </p>
+
+                    <h3 className="font-semibold text-white">
+                      {roadmap.career_goal}
+                    </h3>
+                  </div>
 
                   <span className="w-fit rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-400">
                     AI Personalized
@@ -124,7 +140,7 @@ function CareerRoadmap() {
 
                 </div>
 
-                <p className="mt-2 text-sm leading-6 text-slate-400">
+                <p className="mt-3 text-sm leading-6 text-slate-400">
                   {roadmap.summary}
                 </p>
 
@@ -165,7 +181,7 @@ function CareerRoadmap() {
 
                     <div className="flex-1 rounded-xl border border-slate-800 bg-slate-950/40 p-5">
 
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
                         <div>
 
@@ -197,18 +213,26 @@ function CareerRoadmap() {
 
                       {step.skills.length > 0 && (
 
-                        <div className="mt-4 flex flex-wrap gap-2">
+                        <div className="mt-4">
 
-                          {step.skills.map((skill, skillIndex) => (
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            Recommended Skills
+                          </p>
 
-                            <span
-                              key={`${skill}-${skillIndex}`}
-                              className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-300"
-                            >
-                              {skill}
-                            </span>
+                          <div className="flex flex-wrap gap-2">
 
-                          ))}
+                            {step.skills.map((skill, skillIndex) => (
+
+                              <span
+                                key={`${skill}-${skillIndex}`}
+                                className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-300"
+                              >
+                                {skill}
+                              </span>
+
+                            ))}
+
+                          </div>
 
                         </div>
 
@@ -239,8 +263,9 @@ function CareerRoadmap() {
                 </h3>
 
                 <p className="mt-1 text-sm leading-6 text-slate-500">
-                  Start with the highest-priority skills and build practical
-                  projects as you progress through your roadmap.
+                  Start with the highest-priority step, build practical
+                  experience, and continue progressing through your
+                  personalized roadmap.
                 </p>
 
               </div>
@@ -266,8 +291,8 @@ function CareerRoadmap() {
               </h3>
 
               <p className="mt-1 text-sm leading-6 text-slate-500">
-                Upload and analyze a resume to generate your personalized AI
-                career roadmap.
+                Upload and analyze a resume to generate your personalized
+                AI career roadmap.
               </p>
 
             </div>
@@ -277,7 +302,6 @@ function CareerRoadmap() {
         )}
 
       </div>
-
     </section>
   );
 }
