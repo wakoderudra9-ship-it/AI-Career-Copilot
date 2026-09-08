@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ResumeUpload from "../pages/Resume/ResumeUpload";
 import JobMatcher from "../pages/JobMatcher";
+import CoverLetter from "../pages/CoverLetter";
 
 const AppRoutes = () => {
   return (
@@ -55,6 +56,17 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <JobMatcher />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* AI Cover Letter */}
+
+        <Route
+          path="/cover-letter"
+          element={
+            <ProtectedRoute>
+              <CoverLetter />
             </ProtectedRoute>
           }
         />
